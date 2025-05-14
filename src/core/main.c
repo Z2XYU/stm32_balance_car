@@ -1,4 +1,4 @@
-#include <drivers/register/stc8g.h>
+#include "drivers/register/stc8g.h"
 
 typedef unsigned char uint8_t;
 typedef unsigned int uint16_t;
@@ -28,7 +28,8 @@ static void interrupts_init(void)
 //115200bps @24.000MHz
 void uart_init(void)
 {
-
+    SCON = 0x50;
+    
 }
 
 void main()
