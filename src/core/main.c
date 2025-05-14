@@ -1,13 +1,8 @@
 #include "drivers/register/stc8g.h"
-
-typedef unsigned char uint8_t;
-typedef unsigned int uint16_t;
-typedef unsigned long uint32_t;
-
-typedef signed char int8_t;
-typedef signed int int16_t;
-typedef signed long int32_t;
-
+#include "drivers/uart/uart.h"
+#include <utils/delay/soft_delay.h>
+volatile uint8_t key_pressed = 0;
+    
 static void ports_init(void)
 {
     P3M0 = 0x00;
@@ -15,34 +10,42 @@ static void ports_init(void)
     P5M0 = 0x00;
     P5M1 = 0x00;
 
-    //ÉèÖÃP3.2 Îª INA226µÄAlert ÊäÈë
+    // è®¾ç½®P3.2 ä¸º INA226çš„Alert è¾“å…¥
     P3M0 |= 0x04;
     P3M0 |= 0x04;
 }
 
 static void interrupts_init(void)
 {
-    EA=1;
+    EA = 1;
 }
 
-//115200bps @24.000MHz
-void uart_init(void)
+static void key_init(void)
 {
-    SCON = 0x50;
-    
+    EX1 = 1;
+    IT1 = 1;
 }
 
-void main()
+void key_interrupt(void) __interrupt(2)
 {
-    ports_init();   //¶Ë¿ÚÅäÖÃ
-    interrupts_init();  //ÖĞ¶Ï¿ªÆô
+    Delay10ms();
+    key_pressed=1;
+}
 
+void main(void)
+{
+    ports_init();      // ç«¯å£é…ç½®
+    interrupts_init(); // ä¸­æ–­å¼€å¯
+    uart_init();       // åˆå§‹åŒ–ä¸²å£
 
-    while (1)
+    key_init();
+    uart_send_string("hello world\n");
+
+    while (1) 
     {
-        
+        if (key_pressed) {
+            key_pressed = 0;
+            uart_send_string("Button pressed\n");
+        }
     }
-    
 }
-
-
