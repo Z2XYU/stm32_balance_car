@@ -4,6 +4,12 @@ CFLAGS = -mmcs51 -Isrc
 BUILD_DIR = build
 
 SRCS = src/core/main.c \
+		src/drivers/uart/uart.c \
+		src/utils/delay/soft_delay.c \
+		src/drivers/i2c/i2c.c \
+		src/drivers/ssd1306/ssd1306.c \
+		src/drivers/ssd1306/ssd1306_fonts.c \
+		src/drivers/ina226/ina226.c \
 
 OBJS = $(patsubst src/%, $(BUILD_DIR)/%, $(SRCS:.c=.rel))
 
