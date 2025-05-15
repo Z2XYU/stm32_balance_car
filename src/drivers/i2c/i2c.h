@@ -9,7 +9,7 @@ void i2c_send_data(uint8_t data);
 void i2c_recv_ack(void);
 uint8_t i2c_recv_data(void);
 void i2c_send_ack(void);
-void i2c_send_nak(void);
+void i2c_send_nack(void);
 void i2c_stop(void);
 
 #endif
